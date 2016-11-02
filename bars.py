@@ -60,9 +60,15 @@ def get_closest_bar(data, longitude, latitude):
 if __name__ == '__main__':
     bars = load_data('http://api.data.mos.ru/v1/datasets/1796/rows?')
 
-    lng = input('Введите долготу: ')
-    lat = input('Введите широту: ')
-
     print('Самый большой бар - {0}'.format(get_biggest_bar(bars)))
     print('Самый маленький бар - {0}'.format(get_smallest_bar(bars)))
-    print('Ближайший бар - {0}'.format(get_closest_bar(bars, lng, lat)))
+    try:
+        lng = float(input('Введите долготу: '))  # 55.0000
+        lat = float(input('Введите широту: '))  # 37.4000
+    except ValueError or TypeError:
+        lng = lat = None
+
+    if lng is None or lat is None:
+        print('Некорректные данные. См. пример использования.')
+    else:
+        print('Ближайший бар - {0}'.format(get_closest_bar(bars, lng, lat)))

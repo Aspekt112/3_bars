@@ -42,7 +42,7 @@ def get_smallest_bar(data):
 
 
 def get_closest_bar(data, longitude, latitude):
-    R = 6371  # Earth's radius
+    earth_radius = 6371  # Earth's radius
     distance = float('inf')
     name = ''
     for bar in data:
@@ -50,7 +50,7 @@ def get_closest_bar(data, longitude, latitude):
         lat1 = bar['Cells']['geoData']['coordinates'][1]
         sin1 = sin((lat1 - latitude) / 2)
         sin2 = sin((lng1 - longitude) / 2)
-        curr_distance = 2 * R * asin((sin1 ** 2 + sin2 ** 2 * cos(lat1) * cos(latitude)) ** 0.5)
+        curr_distance = 2 * earth_radius * asin((sin1 ** 2 + sin2 ** 2 * cos(lat1) * cos(latitude)) ** 0.5)
         if curr_distance < distance:
             name = bar['Cells']['Name']
             distance = curr_distance

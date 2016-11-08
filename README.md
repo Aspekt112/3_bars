@@ -10,8 +10,8 @@
 cd 3_bars
 usage: bars.py [-h] [-lng LONGITUDE] [-lat LATITUDE]
 
-Выводит самый больший и маленький бары,при введении долготы и широты выводит
-ближайший бар
+Выводит самый больший и маленький бары, при введении долготы и широты выводит
+ближайший бар.
 
 optional arguments:
   -h, --help            show this help message and exit

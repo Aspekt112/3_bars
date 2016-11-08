@@ -8,7 +8,15 @@
 Пример использования:
 ```sh
 cd 3_bars
-python bars.py
-Введите долготу: 55.0000
-Введите широту: 37.4000
+usage: bars.py [-h] [-lng LONGITUDE] [-lat LATITUDE]
+
+Выводит самый больший и маленький бары,при введении долготы и широты выводит
+ближайший бар
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -lng LONGITUDE, --longitude LONGITUDE
+                        Долгота
+  -lat LATITUDE, --latitude LATITUDE
+                        Широта
 ```

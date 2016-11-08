@@ -2,6 +2,7 @@
 
 import json
 import urllib3
+import argparse
 from math import sin, cos, asin
 
 DATA_MOS_API_KEY = 'cd16cc87e94f1bfce95ed5c26d769a2a'
@@ -62,13 +63,20 @@ if __name__ == '__main__':
 
     print('Самый большой бар - {0}'.format(get_biggest_bar(bars)))
     print('Самый маленький бар - {0}'.format(get_smallest_bar(bars)))
-    try:
-        lng = float(input('Введите долготу: '))  # 55.0000
-        lat = float(input('Введите широту: '))  # 37.4000
-    except ValueError or TypeError:
-        lng = lat = None
 
-    if lng is None or lat is None:
-        print('Некорректные данные. См. пример использования.')
-    else:
-        print('Ближайший бар - {0}'.format(get_closest_bar(bars, lng, lat)))
+    parser = argparse.ArgumentParser(description='Выводит самый больший и маленький бары,'
+                                                 'при введении долготы и широты выводит ближайший бар')
+    parser.add_argument('-lng', '--longitude',
+                        type=float,
+                        help='Долгота')
+
+    parser.add_argument('-lat', '--latitude',
+                        type=float,
+                        help='Широта')
+
+    args = parser.parse_args()
+
+    lng = args.longitude  # 55.0000
+    lat = args.latitude   # 37.4000
+
+    print('Ближайший бар - {0}'.format(get_closest_bar(bars, lng, lat)))

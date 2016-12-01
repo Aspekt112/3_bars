@@ -15,6 +15,14 @@ http://data.mos.ru/opendata/7710881420-bary
     самый близкий бар (текущие gps-координаты ввести с клавиатуры).
 """
 
+"""
+лишние файлы в репозитории, почитай доку по git
+
+оставь в коде ссылку на описание алгоритма расчета расстояния
+
+Используй встроенные функции Python. Документация. (min max для поиска всех трех баров).
+"""
+
 
 def load_data(filepath):
     http = urllib3.PoolManager()
@@ -23,28 +31,18 @@ def load_data(filepath):
 
 
 def get_biggest_bar(data):
-    biggest = float('-inf')
-    biggest_bar_name = ''
-    for bar in data:
-        if bar['Cells']['SeatsCount'] > biggest:
-            biggest = bar['Cells']['SeatsCount']
-            biggest_bar_name = bar['Cells']['Name']
-    return biggest_bar_name
+    biggest_bar = max(data, key=lambda bar: bar['Cells']['SeatsCount'])
+    return biggest_bar['Cells']['Name']
 
 
 def get_smallest_bar(data):
-    smallest = float('inf')
-    smallest_bar_name = ''
-    for bar in data:
-        if bar['Cells']['SeatsCount'] < smallest:
-            smallest = bar['Cells']['SeatsCount']
-            smallest_bar_name = bar['Cells']['Name']
-    return smallest_bar_name
+    smallest_bar = min(data, key=lambda bar: bar['Cells']['SeatsCount'])
+    return smallest_bar['Cells']['Name']
 
 
 def get_closest_bar(data, longitude, latitude):
     earth_radius = 6371  # Earth's radius
-    distance = float('inf')
+    distance = float('inf')  # Формула гаверсинуса en.wikipedia.org/wiki/Haversine_formula
     name = ''
     for bar in data:
         lng1 = bar['Cells']['geoData']['coordinates'][0]

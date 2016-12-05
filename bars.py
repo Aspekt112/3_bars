@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import json
 import urllib3
 import argparse
@@ -13,14 +11,6 @@ http://data.mos.ru/opendata/7710881420-bary
     самый большой бар;
     самый маленький бар;
     самый близкий бар (текущие gps-координаты ввести с клавиатуры).
-"""
-
-"""
-лишние файлы в репозитории, почитай доку по git
-
-оставь в коде ссылку на описание алгоритма расчета расстояния
-
-Используй встроенные функции Python. Документация. (min max для поиска всех трех баров).
 """
 
 
@@ -42,18 +32,18 @@ def get_smallest_bar(data):
 
 def get_closest_bar(data, longitude, latitude):
     earth_radius = 6371  # Earth's radius
-    distance = float('inf')  # Формула гаверсинуса en.wikipedia.org/wiki/Haversine_formula
-    name = ''
+    closest_distance = float('inf')  # Формула гаверсинуса en.wikipedia.org/wiki/Haversine_formula
+    bar_name = ''
     for bar in data:
-        lng1 = bar['Cells']['geoData']['coordinates'][0]
-        lat1 = bar['Cells']['geoData']['coordinates'][1]
-        sin1 = sin((lat1 - latitude) / 2)
-        sin2 = sin((lng1 - longitude) / 2)
-        curr_distance = 2 * earth_radius * asin((sin1 ** 2 + sin2 ** 2 * cos(lat1) * cos(latitude)) ** 0.5)
-        if curr_distance < distance:
-            name = bar['Cells']['Name']
-            distance = curr_distance
-    return name
+        bar_longitude = bar['Cells']['geoData']['coordinates'][0]
+        bar_latitude = bar['Cells']['geoData']['coordinates'][1]
+        sin1 = sin((bar_latitude - latitude) / 2)
+        sin2 = sin((bar_longitude - longitude) / 2)
+        curr_bar_distance = 2 * earth_radius * asin((sin1 ** 2 + sin2 ** 2 * cos(bar_latitude) * cos(latitude)) ** 0.5)
+        if curr_bar_distance < closest_distance:
+            bar_name = bar['Cells']['Name']
+            closest_distance = curr_bar_distance
+    return bar_name
 
 
 if __name__ == '__main__':
@@ -74,7 +64,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    lng = args.longitude  # 55.0000
-    lat = args.latitude   # 37.4000
+    current_longitude = args.longitude  # 55.0000
+    current_latitude = args.latitude   # 37.4000
 
-    print('Ближайший бар - {0}'.format(get_closest_bar(bars, lng, lat)))
+    print('Ближайший бар - {0}'.format(get_closest_bar(bars, current_longitude, current_latitude)))

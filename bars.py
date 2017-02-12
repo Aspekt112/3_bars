@@ -3,20 +3,12 @@ import urllib3
 import argparse
 from math import sin, cos, asin
 
-DATA_MOS_API_KEY = 'cd16cc87e94f1bfce95ed5c26d769a2a'
 
-"""
-http://data.mos.ru/opendata/7710881420-bary
-Требуется скачать спиок московских баров в формате json и написать скрипт, который рассчитает:
-    самый большой бар;
-    самый маленький бар;
-    самый близкий бар (текущие gps-координаты ввести с клавиатуры).
-"""
-
-
-def load_data(filepath):
+def load_data(url):
+    if url is None:
+        return None
     http = urllib3.PoolManager()
-    response = http.request('GET', filepath).data.decode('utf-8')
+    response = http.request('GET', url).data.decode('utf-8')
     return json.loads(response)
 
 
@@ -31,8 +23,8 @@ def get_smallest_bar(data):
 
 
 def get_closest_bar(data, longitude, latitude):
-    earth_radius = 6371  # Earth's radius
-    closest_distance = float('inf')  # Формула гаверсинуса en.wikipedia.org/wiki/Haversine_formula
+    earth_radius = 6371
+    closest_distance = float('inf')
     bar_name = ''
     for bar in data:
         bar_longitude = bar['Cells']['geoData']['coordinates'][0]
@@ -46,25 +38,25 @@ def get_closest_bar(data, longitude, latitude):
     return bar_name
 
 
-if __name__ == '__main__':
+def main(longitude, latitude):
     bars = load_data('http://api.data.mos.ru/v1/datasets/1796/rows?')
-
     print('Самый большой бар - {0}'.format(get_biggest_bar(bars)))
     print('Самый маленький бар - {0}'.format(get_smallest_bar(bars)))
+    print('Ближайший бар - {0}'.format(get_closest_bar(bars, longitude, latitude)))
 
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Выводит самый больший и маленький бары,'
                                                  'при введении долготы и широты выводит ближайший бар')
-    parser.add_argument('-lng', '--longitude',
-                        type=float,
-                        help='Долгота')
 
-    parser.add_argument('-lat', '--latitude',
+    parser.add_argument('-lng', '--longitude',  # 55.0000
                         type=float,
-                        help='Широта')
+                        help='Долгота',
+                        required=True)
+
+    parser.add_argument('-lat', '--latitude',  # 37.4000
+                        type=float,
+                        help='Широта',
+                        required=True)
 
     args = parser.parse_args()
-
-    current_longitude = args.longitude  # 55.0000
-    current_latitude = args.latitude   # 37.4000
-
-    print('Ближайший бар - {0}'.format(get_closest_bar(bars, current_longitude, current_latitude)))
+    main(args.longitude, args.latitude)

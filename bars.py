@@ -40,9 +40,12 @@ def get_closest_bar(data, longitude, latitude):
 
 def main(longitude, latitude):
     bars = load_data('http://api.data.mos.ru/v1/datasets/1796/rows?')
-    print('Самый большой бар - {0}'.format(get_biggest_bar(bars)))
-    print('Самый маленький бар - {0}'.format(get_smallest_bar(bars)))
-    print('Ближайший бар - {0}'.format(get_closest_bar(bars, longitude, latitude)))
+    if bars is None:
+        print('Введите корректный URL')
+    else:
+        print('Самый большой бар - {0}'.format(get_biggest_bar(bars)))
+        print('Самый маленький бар - {0}'.format(get_smallest_bar(bars)))
+        print('Ближайший бар - {0}'.format(get_closest_bar(bars, longitude, latitude)))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Выводит самый больший и маленький бары,'
